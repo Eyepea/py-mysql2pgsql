@@ -239,7 +239,9 @@ class PostgresWriter(object):
 
         table_sql.append('DROP TABLE IF EXISTS "%s" CASCADE;' % table.name)
         table_sql.append('CREATE TABLE "%s" (\n%s\n)\nWITHOUT OIDS;' % (table.name.encode('utf8'), columns))
-        table_sql.append( self.table_comments(table))
+        comments = self.table_comments(table)
+        if comments:
+            table_sql.append(comments)
         return (table_sql, serial_key_sql)
 
     def write_indexes(self, table):
